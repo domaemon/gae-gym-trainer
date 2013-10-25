@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css">
+    <link rel="stylesheet" href="/css/fitness-trainer.css">
+
+  </head>
+  <body>
+
+    <!-- Home -->
+    <div data-role="page" data-theme="b" id="page1">
+      <div data-role="header">
+        <a href="./" data-shadow="false" data-iconshadow="false" data-icon="carat-l" data-iconpos="notext" data-rel="back" data-ajax="false">Back</a>
+        <h3>
+          {{ group_obj.group_name }}
+        </h3>
+      </div>
+      <div data-role="content">
+        <div data-role="fieldcontain">
+	  <form action="/gym-trainer" method="post">
+            <label for="textinput1">
+              Given Name
+            </label>
+            <input name="member_given_name" id="textinput1" placeholder="" value="" type="text">
+            <label for="textinput2">
+	      Family Name
+            </label>
+            <input name="member_family_name" id="textinput2" placeholder="" value="" type="text">
+            <label for="textinput2">
+	      Email Address
+            </label>
+            <input name="member_email_address" id="textinput3" placeholder="" value="" type="text">
+	    <input type="hidden" name="group_id" value="{{ group_obj.group_id }}">
+	    <input type="hidden" name="action" value="add_member">
+	    <input type="submit" value="Submit">
+	  </form>
+	</div>
+      </div> <!-- content -->
+    </div> <!-- page -->
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
+  </body>
+</html>
+{% endautoescape %}
+    

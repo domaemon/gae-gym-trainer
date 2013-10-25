@@ -80,6 +80,7 @@ def create_group_objs(group_ids):
                                                
         group_obj['group_name'] = tmp_group_table.group_name
         user_ids = show_user_ids(group_id)
+        group_obj['group_id'] = group_id
         group_obj['user_ids'] = user_ids
         group_objs.append(group_obj)
 
@@ -89,14 +90,30 @@ def create_group_objs(group_ids):
 def del_group(group_id):
     pass
 
+def add_member(group_id, user_id):
+    # register user if NOT exist
+    tmp_user_entity = UserTable.query(
+        UserTable.user_id == user_id,
+        ancestor=table_key('UserTable')
+        ).fetch(1)
+    
+    if (not tmp_user_entity): # I exist in the NDB
+        register_user(user_id)
 
-def edit_group(action, group_id, user_id):
-    if (action == "del_member"):
-        pass
-    if (action == "add_member"):
-        pass
+    # update UserGroupTable with the member user_id
+    tmp_user_group_entity = UserGroupTable(
+        parent=table_key('UserGroupTable'),
+        user_id = user_id,
+        group_id = group_id)
+    tmp_user_group_entity.put()
 
-def register_me(user_id):
+
+def del_member(group_id, user_id):
+    pass
+
+
+
+def register_user(user_id):
     tmp_user_entity = UserTable(
         parent=table_key('UserTable'),
         user_id = user_id)
@@ -150,7 +167,7 @@ class MainPage(webapp2.RequestHandler):
 
         else: # I do NOT even exist in the NDB
             # register the unique_id in the userlist
-            register_me(user_id)
+            register_user(user_id)
             group_objs = None
 
         url = users.create_logout_url(self.request.uri)
@@ -166,11 +183,33 @@ class MainPage(webapp2.RequestHandler):
 class GymTrainer(webapp2.RequestHandler):        
 
     def get(self):
+        user = users.get_current_user()
+
+        if not user:
+            url = users.create_login_url(self.request.uri)
+            self.redirect(url)
+            return
+
         show = self.request.get('show', 'unknown')
+        group_id = self.request.get('group_id', 'unknown')
 
         if (show == 'create_group'):
             template_values = { }
             template = JINJA_ENVIRONMENT.get_template('create_group.html')
+            self.response.write(template.render(template_values))
+
+        if (show == 'add_member'):
+            group_obj = {}
+            group_obj['group_name'] = GroupTable.get_by_id(
+                int(group_id),
+                parent=table_key('GroupTable')).group_name
+            group_obj['group_id'] = group_id
+            
+            template_values = {
+                'user': user,
+                'group_obj': group_obj,
+                }
+            template = JINJA_ENVIRONMENT.get_template('add_member.html')
             self.response.write(template.render(template_values))
 
     def post(self):
@@ -181,10 +220,21 @@ class GymTrainer(webapp2.RequestHandler):
 
         action = self.request.get('action', 'unknown')
         group_name = self.request.get('group_name', 'unknown')
+        group_id = self.request.get('group_id', 'unknown')
+        user_id = user.user_id()
+
+        member_given_name = self.request.get('member_given_name', 'unknown')
+        member_family_name = self.request.get('member_family_name', 'unknown')
+        member_email_address = self.request.get('member_email_address', 'unknown')
 
         if (action == 'create_group'):
-            user_id = user.user_id()
             create_group(group_name, user_id)
+            self.redirect("/")
+            return
+
+        if (action == 'add_member'):
+            member = users.User(member_email_address)
+            add_member(group_id, str(member.user_id()))
             self.redirect("/")
             return
 

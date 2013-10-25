@@ -3,7 +3,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css">
-    <link rel="stylesheet" href="css/gym-trainer.css">
+    <link rel="stylesheet" href="/css/gym-trainer.css">
   </head>
   <body>
     
@@ -13,7 +13,13 @@
 	{% for group_obj in group_objs %}
 
 	<div data-role="header">
+          <a data-role="button" href="#" class="ui-btn-left" data-icon="delete" data-iconpos="left" >
+            Delete Group
+          </a>
           <h1>{{ group_obj.group_name }}</h1>
+          <a data-role="button" href="/gym-trainer?show=add_member&group_id={{ group_obj.group_id }}" class="ui-btn-right" data-icon="plus" data-iconpos="left" >
+	    Add a Member
+          </a>
 	</div><!-- /header -->
 
 	<div data-role="content">

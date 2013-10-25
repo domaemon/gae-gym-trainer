@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css">
+    <link rel="stylesheet" href="css/gym-trainer.css">
+  </head>
+  <body>
+
+    <!-- Home -->
+    <div data-role="page" data-theme="b" id="page1">
+
+      <div data-role="header">
+        <a href="./" data-shadow="false" data-iconshadow="false" data-icon="carat-l" data-iconpos="notext" data-rel="back" data-ajax="false">Back</a>
+        <h3>
+          Add a New Group
+        </h3>
+      </div>
+
+      <div data-role="content">
+        <div data-role="fieldcontain">
+	  <form action="/gym-trainer" method="post">
+            <label for="textinput1">
+              Group Name
+            </label>
+            <input name="group_name" id="textinput1" placeholder="Group Name" value="" type="text">
+	    <input type="hidden" name="action" value="create_group">
+	    <input type="submit" value="Submit">
+	  </form>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
+  </body>
+</html>
+{% endautoescape %}
+    

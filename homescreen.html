@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.css">
+    <link rel="stylesheet" href="css/gym-trainer.css">
+  </head>
+  <body>
+    
+    <div data-role="page" data-theme="b" class="my-page">
+
+	{% if group_objs %}
+	{% for group_obj in group_objs %}
+
+	<div data-role="header">
+          <h1>{{ group_obj.group_name }}</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+          <ul data-role="listview" data-inset="true">
+
+          <li><a href="#">
+              <img src="/img/default-portrait-icon.jpg" class="ui-li-thumb">
+              <h2>{{ user.nickname() }}</h2>
+              <p>We shall train.</p>
+              <p class="ui-li-aside">Trainer</p>
+          </a></li>
+
+	  {% for user_id in group_obj.user_ids %}
+	  {% endfor %}
+
+          </ul>
+	</div><!-- /content -->
+
+	{% endfor %}
+	
+	{% else %}
+	
+	<div data-role="header">
+          <h1>No Group</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+          <ul data-role="listview" data-inset="true">
+          <li><a href="#">
+              <img src="/img/default-portrait-icon.jpg" class="ui-li-thumb">
+              <h2>{{ user.nickname() }}</h2>
+              <p>We shall train.</p>
+              <p class="ui-li-aside">Trainer</p>
+          </a></li>
+          </ul>
+	</div>
+
+	{% endif %}
+
+	<!-- common footer area -->
+
+	<div data-role="footer" data-position="fixed">
+	  <div data-role="navbar" data-iconpos="left">
+	    <ul>
+	      <li>
+		<a href="{{ url }}" data-icon="alert">
+		  Logout
+		</a>
+	      </li>
+	      <li><a href="/gym-trainer?show=create_group" data-icon="plus">New Group</a></li>
+	    </ul>
+	  </div><!-- /navbar -->
+	</div> <!-- footer -->
+
+    </div> <!-- page -->
+    
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.0-beta.1/jquery.mobile-1.4.0-beta.1.min.js"></script>
+  </body>
+</html>
+{% endautoescape %}
